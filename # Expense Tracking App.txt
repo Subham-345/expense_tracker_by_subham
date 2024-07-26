@@ -18,7 +18,7 @@ To get started with the Expense Tracking App, follow these steps:
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/Subham-345/expense_tracker_by_subham/tree/master
+   git clone: https://github.com/Subham-345/expense_tracker_by_subham/tree/master
 
 
 2. Navigate to the Project Directory
