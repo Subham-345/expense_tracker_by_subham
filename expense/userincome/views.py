@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
-from .models import Source, UserIncome
-from django.core.paginator import Paginator
-from userpreferences.models import UserPreference
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from .models import Source, UserIncome
+from django.contrib import messages
+from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 import json
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from userpreferences.models import UserPreference
 import datetime
+import csv
 # Create your views here.
 
 
@@ -111,31 +113,49 @@ def delete_income(request, id):
     return redirect('income')
 
 
-def income_category_summary(request):
+def income_source_summary(request):
     todays_date = datetime.date.today()
     six_months_ago = todays_date-datetime.timedelta(days=30*6)
     incomes = UserIncome.objects.filter(owner=request.user,
                                       date__get=six_months_ago, date__lte=todays_date)
-    finalrep = {}
+    finalin = {}
 
-    def get_category(income):
-        return income.category
-    category_list = list(set(map(get_category, incomes)))
+    def get_source(income):
+        return income.source
+    source_list = list(set(map(get_source, incomes)))
 
-    def get_income_category_amount(category):
+    def get_income_source_amount(source):
         amount = 0
-        filtered_by_category = incomes.filter(category=category)
+        filtered_by_source = incomes.filter(source=source)
 
-        for item in filtered_by_category:
+        for item in filtered_by_source:
             amount += item.amount
         return amount
 
-    for x in incomes:
-        for y in category_list:
-            finalrep[y] = get_income_category_amount(y)
+    for a in incomes:
+        for b in source_list:
+            finalin[b] = get_income_source_amount(b)
 
-    return JsonResponse({'income_category_data': finalrep}, safe=False)
+    return JsonResponse({'income_source_data': finalin}, safe=False)
 
 
-def statsincomeview(request):
+def stats_income_view(request):
     return render(request, 'income/statsincomeview.html')
+
+
+def export_in_csv(request):
+    response=HttpResponse(content_type='text/csv')
+    response['content-Disposition']='attachment; filename=Incomes'+\
+    str(datetime.datetime.now())+'.csv'
+
+
+    writer = csv.writer(response)
+    writer.writerow(['Amount','Description','Category','Date'])
+
+    incomes = UserIncome.objects.filter(owner=request.user)
+
+    for income in incomes:
+        writer.writerow([income.amount, income.description,
+                         income.source, income.date])
+        
+    return response
