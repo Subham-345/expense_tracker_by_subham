@@ -41,7 +41,7 @@ const displayChart = (data, labels) => {
     options: {
       title: {
         display: true,
-        text: "Expense  Distribution Per Category",
+        text: "Income Distribution Per Category",
         fontSize: 25,
       },
       legend: {
@@ -56,10 +56,10 @@ const displayChart = (data, labels) => {
 };
 
 const getCategoryData = () => {
-  fetch("last_3months_stats")
+  fetch("/income_source_summary")
     .then((res) => res.json())
     .then((res1) => {
-      const results = res1.expenses_category_data;
+      const results = res1.income_source_data;
       const [labels, data] = [Object.keys(results), Object.values(results)];
       console.log("data", data);
       displayChart(data, labels);

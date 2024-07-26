@@ -39,7 +39,7 @@ const renderChart = (data, labels) => {
                       label: function(context) {
                           let label = context.label || '';
                           if (context.parsed) {
-                              label += ': ' + context.parsed + ' units';  // Customize this as needed
+                              label += ': ' + context.parsed + ' units'; 
                           }
                           return label;
                       }
