@@ -15,6 +15,16 @@
     <!-- Custom styles for this template -->
     <link href="{% static 'css/dashboard.css' %}" rel="stylesheet" />
   </head>
+  <style>
+    .centered {
+        text-align: center;
+    }
+    .hero-image {
+        max-width: 100%;
+        height: auto;
+        margin: 20px 0;
+    }
+</style>
   <body>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
       <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">TrulyExpenses</a>
@@ -47,7 +57,11 @@
         {% include 'partials/_sidebar.html' %}
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-          {% block content %} {% endblock %}
+          {% block content %}
+          <h1>Welcome to TrulyExpenses</h1>
+          <img src="{% static 'img/business-expense-tracker.jpg' %}" alt="business-expense-tracker" width="500" height="500">
+          <h4>Effortlessly track your business expenses and stay on top of your finances with TrulyExpenses. Our intuitive platform makes it easy to manage budgets, monitor spending, and achieve your financial goals.</h4>
+          {% endblock %}
         </main>
       </div>
     </div>
